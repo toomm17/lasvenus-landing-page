@@ -1,0 +1,50 @@
+body {
+  margin: 0;
+  padding: 0;
+  background: black;
+  font-family: 'system-ui';
+  color: #00ff00;
+  font-size: 20px;
+  word-break: break-all;
+}
+
+canvas {
+  height: 100%;
+}
+
+input {
+  position: absolute;
+  background: transparent;
+  font-size: 20px;
+  font-style: 'system-ui';
+  color: #00ff00;
+  border: 0px;
+  width: 100%;
+  word-break: break-all;
+}
+
+input:focus {
+  outline: none;
+}
+
+h2 {
+  position: absolute;
+  top: 25%;
+  color: #00ff00;
+  font-family: 'system-ui';
+  left: 35%;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.none {
+  display: none !important;
+}
+
+.green {
+  color: #00ff00 !important;
+}

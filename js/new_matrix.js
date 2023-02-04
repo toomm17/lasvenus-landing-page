@@ -1,0 +1,80 @@
+const numbers =
+  '1111640401671411630401410401501651471450540401641671570551471511621641500401571411530540401671511641500401421571651471501630401421621571531451560401571461460540401411601601411621451561641541710401541571561470401411471570540401411561440401671511641500401421621571531451560401421411621530540401571661451621471621571671560401671511641500401571541440401631571621451630560560401271511641500401501511630401501651471450540401431541651551631511541710540401411631711551551451641621511431411541541710401631601621451411440401471561411621541451440401501411561441630401411561440401461511561471451621630540401501450401631641571571440401541511531450401411560401571541440540401411561471621710401411561440401431571561641451551601641651571651630401461621451411530401421451641671451451560401641501450401631551511541511561470401421511621431501451630560401221451601541411710561111640401671411630401410401501651471450540401641671570551471511621641500401571411530540401671511641500401421571651471501630401421621571531451560401571461460540401411601601411621451561641541710401541571561470401411471570540401411561440401671511641500401421621571531451560401421411621530540401571661451621471621571671560401671511641500401571541440401631571621451630560560401271511641500401501511630401501651471450540401431541651551631511541710540401411631711551551451641621511431411541541710401631601621451411440401471561411621541451440401501411561441630401411561440401461511561471451621630540401501450401631641571571440401541511531450401411560401571541440540401411561471621710401411561440401431571561641451551601641651571651630401461621451411530401421451641671451451560401641501450401631551511541511561470401421511621431501451630561231507423123'.split(
+    '',
+  );
+
+const input = document.querySelector('input');
+const inputWidth = 69;
+
+function typedText(text, element, delay) {
+  if (text.length > 0) {
+    element.value += text[0];
+    changeColor();
+    setTimeout(() => {
+      typedText(text.slice(1), element, delay);
+    }, delay);
+  } else {
+    // Colored last numbers
+    const spanList = Array.from(document.querySelectorAll('span'));
+
+    const whiteNumbersArray = spanList.slice(-8, spanList.length);
+    for (const number of whiteNumbersArray) {
+      number.classList.add('green');
+    }
+
+    const inputPosition = getLastSpanBoundingRect();
+    createInput(inputPosition);
+  }
+}
+
+function changeColor() {
+  const spanList = document.querySelectorAll('span');
+  if (spanList.length > 7) {
+    const span = spanList[spanList.length - 8];
+    span.classList.add('green');
+  }
+}
+
+function getLastSpanBoundingRect() {
+  const spanList = document.querySelectorAll('span');
+  const lastSpan = spanList[spanList.length - 1];
+  const lastSpanPosition = lastSpan.getBoundingClientRect();
+  return { x: lastSpanPosition.x, y: lastSpanPosition.y };
+}
+
+function createInput(inputPos) {
+  if (inputPos.x + inputWidth < window.innerWidth) {
+    input.style.top = inputPos.y + 1 + 'px';
+    input.style.left = inputPos.x + 10 + 'px';
+    input.classList.remove('none');
+    input.focus();
+  }
+}
+
+function deleteNumbers(spanList, element, delay) {
+  const span = spanList[spanList.length - 1];
+  element.removeChild(span);
+  setTimeout(() => {
+    deleteNumbers(spanList.slice(0, -1), element, delay);
+  }, delay);
+}
+
+const row = document.querySelector('#row');
+typedText(numbers, row, 1);
+
+let inputValue = '';
+input.addEventListener('input', (event) => {
+  if (event.data) {
+    inputValue += event.data;
+  } else {
+    inputValue = inputValue.slice(0, -1);
+  }
+
+  if (inputValue == '051321') {
+    input.value = '';
+    input.blur();
+    const spanList = Array.from(document.querySelectorAll('span'));
+    deleteNumbers(spanList, row, 1);
+    document.querySelector('h2').classList.remove('none');
+  }
+});
